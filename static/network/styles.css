@@ -1,0 +1,26 @@
+.textarea {
+    width: 50%;
+    height: 150px;
+  }
+
+
+.comment-box {
+    margin-top: 30px !important;
+}
+
+
+.comment-box .media-body p {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+.comment-box .media-body .media p {
+    margin-bottom: 0;
+}
+.comment-box .media-heading {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 7px 10px;
+    position: relative;
+    margin-bottom: -1px;
+}
+
