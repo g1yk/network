@@ -23,5 +23,13 @@ class Profile(models.Model):
     posts = models.ManyToManyField(Post)
     followers = models.ManyToManyField(User, related_name="follower")
 
+    def __str__(self):
+        return "%s" % (self.user)
+
+class UserFollowing(models.Model):
+    user_id = models.ForeignKey("User", related_name="following", on_delete=models.CASCADE)
+    
+
+
 
 

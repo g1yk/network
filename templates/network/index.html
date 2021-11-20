@@ -20,7 +20,8 @@
 
     <div class="card comment-box">
         <div class="card-header">
-            <strong>{{post.author}}</strong> 
+            <strong><a href="{% url 'user_profile' username=post.author %}">{{post.author}}</a></strong>
+
             <span class="text-muted">posted {{post.date_created}}</span>
         </div>
         <div class="card-body">
@@ -31,4 +32,4 @@
 
 
 
-{% endblock %}
+    {% endblock %}
