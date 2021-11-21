@@ -27,7 +27,7 @@ class Profile(models.Model):
         return "%s" % (self.user)
 
 class UserFollowing(models.Model):
-    user_id = models.ForeignKey("User", related_name="following", on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, related_name="following", on_delete=models.CASCADE)
     
 
 

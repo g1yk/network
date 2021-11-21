@@ -2,11 +2,18 @@
 
 {% block body %}
 
-{{ user.username }}
+<div class="container">
+    <div class="name center">
+       <h1>{{ user.username }}</h1> 
+    </div>
+    <div class="following">
+        Following: 
+    </div>
 
-Followers:
-{{ user }}
-{{user.followers}}
+
+
+
+</div>
 
 
 {% endblock %}
