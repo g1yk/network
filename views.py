@@ -1,12 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from network.forms import PostForm
 
-from .models import User, Post
+from .models import Follower, User, Post, UserFollowing
 
 
 def index(request):
@@ -26,13 +26,47 @@ def index(request):
     })
 
 def user_profile(request, username):
+    current_user = request.user
     user = User.objects.get(username=username)
+    print(user, current_user)
+    try:
+        UserFollowing.objects.get(user_id=current_user, following_user_id=user)
+        following_is_true = True
+    except:
+        following_is_true = False
+    user_following = len(user.following.all())
+    user_followers = len(user.followers.all())
+    print(user_followers)
     context = {
        "user": user,
+       "following_is_true":following_is_true,
+       'user_followers':user_followers,
+       'user_following':user_following
     }
 
     return render(request, 'user_profile.html', context)
-    
+
+def followers_count(request):
+    if request.method == "POST":
+        print('POST')
+        value = request.POST['value']
+        user = request.POST['user']
+        follower = request.POST['follower']
+        print('user = ', user)
+        main_user = User.objects.get(username=request.POST['user'])
+        follower_user = User.objects.get(username=request.POST['follower'])
+        if value == 'follow':
+            UserFollowing.objects.create(user_id=main_user,
+                             following_user_id=follower_user)
+        else: 
+            UserFollowing.objects.filter(user_id=main_user,
+                             following_user_id=follower_user).delete()
+            # follower_cnt = Follower.objects.create(follower=follower, user=user)
+            # print(follower_cnt, follower, user)
+            # follower_cnt.save()
+        return redirect('/profile/'+follower)
+
+
 
 def login_view(request):
     if request.method == "POST":
