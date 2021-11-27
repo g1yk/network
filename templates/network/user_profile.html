@@ -2,11 +2,38 @@
 
 {% block body %}
 
-{{ user.username }}
+<div class="container">
+    <div class="name center">
+       <h1>{{ user.username }}</h1> 
+       <h1>{{ current_user }}</h1> 
+       <h1>{{ user_followers }}</h1> 
 
-Followers:
-{{ user }}
-{{user.followers}}
+
+    </div>
+    <div class="following">
+        Following: 
+        <span class="profile-stat-count">{{user_following}}</span>
+    </div>
+    <div class="followers">
+        Followers: 
+        <span class="profile-stat-count">{{user_followers}}</span>
+    </div>
+
+
+<form action="followers_count" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="user" value="{{request.user}}" readonly/>
+    <input type="hidden" name="follower" value="{{user.username}}" readonly/>
+    {% if following_is_true == False %}
+        {{following_is_true}}
+            <input type="hidden" name="value" value="follow" readonly/>
+            <button type="submit" class="btn profile-edit-btn">Follow</button>
+        {% else %}
+            <input type="hidden" name="value" value="unfollow" readonly/>
+            <button type="submit" class="btn profile-edit-btn">Unfollow</button>
+    {% endif %}
+</form>
+</div>
 
 
 {% endblock %}

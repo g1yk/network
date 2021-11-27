@@ -27,8 +27,20 @@ class Profile(models.Model):
         return "%s" % (self.user)
 
 class UserFollowing(models.Model):
-    user_id = models.ForeignKey("User", related_name="following", on_delete=models.CASCADE)
-    
+    user_id = models.ForeignKey("User", related_name="following",  on_delete=models.CASCADE)
+    following_user_id = models.ForeignKey("User", related_name="followers", on_delete=models.CASCADE,  default=None)
+    def __str__(self):
+        return "%s" % (self.user_id)
+
+    class Meta:
+        unique_together = ('user_id', 'following_user_id',)
+
+class Follower(models.Model):
+    follower = models.CharField(max_length=1000)
+    user = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return "%s" % (self.user)
 
 
 
