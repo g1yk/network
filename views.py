@@ -14,14 +14,7 @@ from .models import Follower, User, Post, UserFollowing
 
 def index(request):
     posts = Post.objects.all().order_by('-date_created')
-    page = request.GET.get('page', 1)
-    paginator = Paginator(posts, 10)
-    try:
-        post_list = paginator.page(page)
-    except PageNotAnInteger:
-        post_list = paginator.page(1)
-    except EmptyPage:
-        post_list = paginator.page(paginator.num_pages)
+    post_list = pagination(request, posts)
 
     if request.method == "POST":
         if request.POST.get('content'):
@@ -38,6 +31,18 @@ def index(request):
         "paginatior":paginator,
         "post_list":post_list
     })
+
+def pagination(request, posts):
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 10)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
+    except EmptyPage:
+        post_list = paginator.page(paginator.num_pages)
+
+    return post_list
 
 def user_profile(request, username):
     current_user = request.user
@@ -75,36 +80,22 @@ def followers_count(request):
         else: 
             UserFollowing.objects.filter(user_id=main_user,
                              following_user_id=follower_user).delete()
-            # follower_cnt = Follower.objects.create(follower=follower, user=user)
-            # print(follower_cnt, follower, user)
-            # follower_cnt.save()
         return redirect('/profile/'+follower)
 
 def following_page(request):
-    # print(UserFollowing.objects.filter(user_id=request.user))
     user_id_array = []
     all_posts = None
     following_users = UserFollowing.objects.filter(user_id=request.user).values('following_user_id')
-    print(following_users)
+
     for user in following_users:
         user_id = user.get('following_user_id')
         user_id_array.append(user_id)
-        users = User.objects.get(id=user_id)
-        # print(user_id_array)
-        all_posts = Post.objects.filter(author__in=user_id_array)
-        print(all_posts)
+        all_posts = Post.objects.filter(author__in=user_id_array).order_by('-date_created')
+        post_list = pagination(request, all_posts)
 
-    # print(UserFollowing.objects.values_list('following_user_id', user_id=request.user))
-    # print(User.objects.get(id=2))
 
-    all_following = request.user.following.all()
-    user_followers = request.user.followers.all()
-    # print(all_following, user_followers)
-    # print(all_following)
-    # for follower in all_following:
-    #     print(follower)
     return render(request, "network/following_page.html", {
-        "followers_posts":all_posts.order_by('-date_created')
+        "post_list":post_list
     })
 
 def login_view(request):

@@ -16,21 +16,6 @@
 
     </div>
 
-    <!-- {% for post in posts %}
-
-    <div class="card comment-box">
-        <div class="card-header">
-            <strong><a href="{% url 'user_profile' username=post.author %}">{{post.author}}</a></strong>
-
-            <span class="text-muted">posted {{post.date_created}}</span>
-        </div>
-        <div class="card-body">
-            {{post.content}}
-        </div>
-    </div>
-    {% endfor %} -->
-
-    {{post_list}}
 
     {% for post in post_list %}
 
@@ -75,4 +60,5 @@
         </ul>
     </nav>
         {% endif %}
+        
     {% endblock %}
