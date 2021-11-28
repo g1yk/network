@@ -16,7 +16,23 @@
 
     </div>
 
-    {% for post in posts %}
+    <!-- {% for post in posts %}
+
+    <div class="card comment-box">
+        <div class="card-header">
+            <strong><a href="{% url 'user_profile' username=post.author %}">{{post.author}}</a></strong>
+
+            <span class="text-muted">posted {{post.date_created}}</span>
+        </div>
+        <div class="card-body">
+            {{post.content}}
+        </div>
+    </div>
+    {% endfor %} -->
+
+    {{post_list}}
+
+    {% for post in post_list %}
 
     <div class="card comment-box">
         <div class="card-header">
@@ -32,4 +48,31 @@
 
 
 
+    {% if post_list.has_other_pages %}
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+
+            {% if post_list.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ post_list.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            {% for i in post_list.paginator.page_range %}
+                {% if post_list.number == i %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link"> {{i}} <span class="sr-only">(current)</span></a>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if post_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ post_list.next_page_number }}">Next</a>
+              </li>
+            {% endif %}
+        </ul>
+    </nav>
+        {% endif %}
     {% endblock %}

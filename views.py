@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core import paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 from network.forms import PostForm
 
@@ -10,6 +13,15 @@ from .models import Follower, User, Post, UserFollowing
 
 
 def index(request):
+    posts = Post.objects.all().order_by('-date_created')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(posts, 10)
+    try:
+        post_list = paginator.page(page)
+    except PageNotAnInteger:
+        post_list = paginator.page(1)
+    except EmptyPage:
+        post_list = paginator.page(paginator.num_pages)
 
     if request.method == "POST":
         if request.POST.get('content'):
@@ -22,7 +34,9 @@ def index(request):
                 print(f'Saved {new_post, new_post.author}')
 
     return render(request, "network/index.html", {
-        "posts": Post.objects.all().order_by('-date_created')
+        "posts": Post.objects.all().order_by('-date_created'),
+        "paginatior":paginator,
+        "post_list":post_list
     })
 
 def user_profile(request, username):
