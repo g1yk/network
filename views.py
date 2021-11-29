@@ -1,11 +1,14 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.core import paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 from network.forms import PostForm
 
@@ -31,6 +34,37 @@ def index(request):
         "paginatior":paginator,
         "post_list":post_list
     })
+
+@csrf_exempt
+@login_required
+def edit_post(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    post = Post.objects.get(id=pk)
+    data = json.loads(request.body)
+    edited_post = data["body"]
+    if edited_post == [""]:
+        return JsonResponse({
+            "error": "At least one character is required"
+        }, status=400)
+    print('HERE')
+    try:
+        post.content = edited_post
+        print(post)
+        post.save()
+    except:
+        return JsonResponse({
+            "error": "Something bad happened"
+        }, status=400)
+
+
+        # if form.is_valid():
+        #     form.save()
+        #     return JsonResponse({}, status=201)
+
+    return JsonResponse({"message": "Post edited successfully."}, status=201)
+
 
 def pagination(request, posts):
     page = request.GET.get('page', 1)

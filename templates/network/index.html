@@ -29,6 +29,7 @@
             </div>
         </div>
         <div class="card-body" id="body">{{post.content}}</div>
+        <input type='hidden' class="post-id" value='{{post.pk}}' name='pk'>
     </div>
     {% endfor %}
 
