@@ -1,29 +1,30 @@
+document.addEventListener('DOMContentLoaded', function () {
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Use buttons to toggle between views
-    // document.querySelector('#inbox').addEventListener('click', () => display_emails('inbox'));
-    document.getElementById('compose-form').addEventListener('submit', send_email)
+    console.log('hi')
+    let element = document.querySelectorAll(".edit-icon")
+    element.forEach(function(el){
+        el.addEventListener('click', function () {
+            let card = el.parentElement.parentElement.parentElement
+            let body = card.getElementsByClassName('card-body')[0]
+            
+            // console.log(card.childNodes[0])
+          console.log('click', body.innerHTML);
 
-  });
+          var input = document.createElement("textarea");
+          let button = document.createElement("button")
+          button.innerHTML = "Save"
+          button.className = "btn btn-primary btn-sm"
+          input.value = body.innerHTML
+          body.innerHTML = ""
+          input.className = 'form-control'
+          input.style.boxSizing = 'border-box'
+          input.style.width = '100%'
+          
+          input.name = "post";
+          body.append(input); //appendChild
+          body.appendChild(button);
 
-
-  function send_email(event) {
-    const body = document.querySelector('#compose-body').value
-    console.log(`body ${body}`);
-    fetch('/posts', {
-            method: 'POST',
-            body: JSON.stringify({
-                body: body
-            })
-        })
-        .then(response => response.json())
-        .then(result => {
-            // Print result
-            console.log(result);
-            display_emails('sent');
-        })
-        .catch(error => {
-            console.log(`Error ${error}`);
         });
-    event.preventDefault();
-  }
+      });
+});
+

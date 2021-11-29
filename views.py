@@ -98,6 +98,11 @@ def following_page(request):
         "post_list":post_list
     })
 
+# def edit(request, entity):
+#         if request.method == "POST":
+#         if request.POST.get("title") and request.POST.get("content"):
+#             print(request.POST.get("title"))
+
 def login_view(request):
     if request.method == "POST":
         if request.POST.get('amount'):

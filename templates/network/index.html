@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
 <div class='container'>
@@ -21,13 +22,13 @@
 
     <div class="card comment-box">
         <div class="card-header">
-            <strong><a href="{% url 'user_profile' username=post.author %}">{{post.author}}</a></strong>
-
-            <span class="text-muted">posted {{post.date_created}}</span>
+            <div class="icons space-between">
+                <strong><a href="{% url 'user_profile' username=post.author %}">{{post.author}}</a></strong>
+                <span class="text-muted">posted {{post.date_created}}</span>
+                <span class="ml-5 fa-solid fa-pen-to-square edit-icon"></span>
+            </div>
         </div>
-        <div class="card-body">
-            {{post.content}}
-        </div>
+        <div class="card-body" id="body">{{post.content}}</div>
     </div>
     {% endfor %}
 
@@ -43,22 +44,27 @@
             {% endif %}
 
             {% for i in post_list.paginator.page_range %}
-                {% if post_list.number == i %}
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link"> {{i}} <span class="sr-only">(current)</span></a>
-                </li>
-                {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
-                {% endif %}
+            {% if post_list.number == i %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link"> {{i}} <span class="sr-only">(current)</span></a>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+            {% endif %}
             {% endfor %}
 
             {% if post_list.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ post_list.next_page_number }}">Next</a>
-              </li>
+            </li>
             {% endif %}
         </ul>
     </nav>
-        {% endif %}
-        
+    {% endif %}
+
     {% endblock %}
+
+    {% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+    {% endblock %}
+    
