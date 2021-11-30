@@ -43,12 +43,18 @@ def edit_post(request, pk):
 
     post = Post.objects.get(id=pk)
     data = json.loads(request.body)
+
+    if (request.user != post.author):
+        return JsonResponse({
+            "error": "You have to be post creator to be able to edit it"
+        }, status=400)
+
     edited_post = data["body"]
     if edited_post == [""]:
         return JsonResponse({
             "error": "At least one character is required"
         }, status=400)
-    print('HERE')
+
     try:
         post.content = edited_post
         print(post)
@@ -57,11 +63,6 @@ def edit_post(request, pk):
         return JsonResponse({
             "error": "Something bad happened"
         }, status=400)
-
-
-        # if form.is_valid():
-        #     form.save()
-        #     return JsonResponse({}, status=201)
 
     return JsonResponse({"message": "Post edited successfully."}, status=201)
 
