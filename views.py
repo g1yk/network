@@ -70,6 +70,35 @@ def edit_post(request, pk):
     return JsonResponse({"message": "Post edited successfully."}, status=201)
 
 
+@csrf_exempt
+@login_required
+def like_post(request, pk):
+    print('got it')
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    post = Post.objects.get(id=pk)
+    user = request.user
+
+    try:
+        if Post.objects.filter(id=pk, liked_by=user).exists():
+            post.liked_by.remove(user)
+            post.save()
+            return JsonResponse({"message": "Like has been removed.",
+            "total_likes": f"{post.liked_by.count()}"}, status=201)
+        else:
+            post.liked_by.add(user)
+            post.save()
+    except:
+        return JsonResponse({
+            "error": "Something bad happened"
+        }, status=400)
+
+    return JsonResponse({"message": "Liked post successfully.", "total_likes": f"{post.liked_by.count()}"}, status=201)
+
+
+
+
 def pagination(request, posts):
     page = request.GET.get('page', 1)
     paginator = Paginator(posts, 10)

@@ -1,8 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+
     let element = document.querySelectorAll(".edit-icon")
     element.forEach(function (el) {
-        el.addEventListener('click', () => create_edit(el));
+        el.addEventListener('click', () => create_like(el));
+    });
+
+    let like_element = document.querySelectorAll(".like-icon")
+    like_element.forEach(function (el) {
+        el.addEventListener('click', () => create_like(el));
     });
 });
 
@@ -35,9 +41,9 @@ function create_edit(el) {
 function edit_post(id, content, body) {
     fetch(`/edit_post/${id}/`, {
       method: "POST",
-      body: JSON.stringify({
-      body:content
-      })
+    //   body: JSON.stringify({
+    //   body:content
+    //   })
     })
     .then((res) => {
         document.querySelector('#textarea').style.display = "none"
@@ -47,4 +53,41 @@ function edit_post(id, content, body) {
     .catch(error => {
         console.log(error)
     });
+  }
+
+
+  function create_like(el) {
+    let card = el.parentElement.parentElement.parentElement.parentElement
+    let id = card.getElementsByClassName('post-id')[0].value
+    console.log('el ', el.innerHTML)
+    console.log(id)
+    like_post(id, el)
+  }
+
+  function like_post(id, el) {
+    fetch(`/like_post/${id}/`, {
+      method: "POST",
+      body: JSON.stringify({
+      body:id
+      })
+    })
+    .then((response) => response.json())
+    .then((res) => {
+        console.log(res.total_likes)
+        let total_likes = res.total_likes
+        let like = el
+        animate(like, el)
+        el.innerText = total_likes
+        })
+    .catch(error => {
+        console.log(error)
+    });
+  }
+
+  function animate(icon, el){
+    if(icon.className=="far fa-heart like-icon"){
+      icon.className = "fa-solid fa-heart like-icon";
+    }else{
+      icon.className = "far fa-heart like-icon";
+    }
   }
