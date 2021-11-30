@@ -32,8 +32,11 @@ def index(request):
     return render(request, "network/index.html", {
         "posts": Post.objects.all().order_by('-date_created'),
         "paginatior":paginator,
-        "post_list":post_list
+        "post_list":post_list,
+        # "likes":Like.objects.all()
     })
+
+
 
 @csrf_exempt
 @login_required

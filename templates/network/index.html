@@ -17,6 +17,9 @@
 
     </div>
 
+    <!-- {% for like in likes %}
+        {{like.liked_by.count}}
+        {% endfor %} -->
 
     {% for post in post_list %}
 
@@ -28,7 +31,16 @@
                 <span class="ml-5 fa-solid fa-pen-to-square edit-icon"></span>
             </div>
         </div>
-        <div class="card-body" id="body">{{post.content}}</div>
+        <div class="content flex-container">
+            <div class="card-body" id="body">{{post.content}}
+                <div class="like">
+                <i class="far fa-heart">{{post.liked_by.count}}</i>
+                </div>
+            </div>
+    
+        </div>
+            
+        
         <input type='hidden' class="post-id" value='{{post.pk}}' name='pk'>
     </div>
     {% endfor %}

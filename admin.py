@@ -20,10 +20,14 @@ class FollowerAdmin(admin.ModelAdmin):
 class UserFollowingAdmin(admin.ModelAdmin):
     pass
 
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Follower, FollowerAdmin)
 admin.site.register(UserFollowing, UserFollowingAdmin)
+
+
 
 
