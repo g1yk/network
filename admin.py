@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth import models
+
+from network.models import Follower
 
 # Register your models here.
 
@@ -17,3 +20,5 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
+
+
